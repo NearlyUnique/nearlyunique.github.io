@@ -46,25 +46,48 @@ hr { display:block; height:1px; border:0; border-top:1px solid #ccc; margin:1em 
 
 input, select { vertical-align:middle; }
 /* END RESET CSS */
-
+/* Floating */
+.sticky-header{
+	border:2px solid white;
+	border-top:0;
+}
+.stuck-header {
+	position: fixed;
+	top: 0;
+	visibility: hidden;
+	border:2px solid #A63300;
+	border-top:0;
+}
+/* END Floating*/
 body{
 	font-family:Constantia,serif;
 	font-weight:normal;
 	font-size: 18px;
 	color:#222;
 	line-height: 25px;
+}
+header{
+	background: white;
+	position: fixed;
+	text-align: center;
+	top: 0;
+	width:100%;
+	border-bottom:2px solid #A63300;
+}
+article{
 	width: 612px;
 	margin: 0 auto;
+	margin-top: 8em;
 	margin-bottom: 5em;
 }
-h1{
-	padding-bottom:0.5em;
-	border-bottom:2px solid #222;
+h2, h3{
+  background: white;
+  padding: 10px;
+  margin: 0 0 20px 0;
 }
 a{
 	text-decoration:none;
 	color:#A63300;
-
 }
 a:hover{
 	color:#FF5C00;
