@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Cambridge Folk Festival timetables">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cambridge folk Festival 2023</title>
+  <link rel="stylesheet" href="styles/timetablejs.css">
+  <link rel="stylesheet" href="styles/demo.css">
+  <style>
+    .showDay{
+      color: aliceblue;
+      background-color: rgb(64,64,64);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="hero-unit">
+    <button onclick="setDay('2023-07-27',this)">Thursday</button>
+    <button onclick="setDay('2023-07-28',this)">Friday</button>
+    <button onclick="setDay('2023-07-29',this)">Saturday</button>
+    <button onclick="setDay('2023-07-30',this)">Sunday</button>
+  </div>
+  <div id="selected">
+
+  </div>
+
+  <div class="timetable"></div>
+
+  <script src="scripts/timetable.js"></script>
+  <script src="cff23.js"></script>
+
+  <script>
+    let showDay = "2023-07-27";
+    let prevButton;
+    function setDay(e,btn) {
+      showDay = e;
+      [...document.getElementsByTagName("button")].forEach(b => {
+        b.className = b === btn ? "showDay" : "";
+      });
+      document.getElementById('selected').innerHTML = '';
+      updateTimetable();
+    }
+    function toTime(t) {
+      let h = t.getHours() + "";
+      let m = t.getMinutes() + "";
+      return `${h.padStart(2, '0')}:${m.padStart(2, '0')}`;
+    }
+    function updateTimetable() {
+      var timetable = new Timetable();
+
+      let stages = {};
+      events.forEach(e => {
+        if (e.from.startsWith(showDay)) {
+          stages[e.stage.trim()] = e.stage;
+        }
+      });
+      timetable.setScope(10, 23)
+      timetable.addLocations(Object.keys(stages));
+      events.forEach(e => {
+        if (!e.from.startsWith(showDay)) {
+          return;
+        }
+        try {
+          let toDate = d => new Date(Date.parse(d));
+          timetable.addEvent(e.act.trim(), e.stage.trim(), toDate(e.from), toDate(e.to), {
+            url: '#',
+            onClick: (e) => {
+              let elem = document.getElementById('selected');
+              elem.innerHTML = `${e.location}<br>${toTime(e.startDate)}-${toTime(e.endDate)}<br>${e.name}`;
+            }
+          });
+        } catch (ex) {
+          console.error({ error: ex, event: e });
+        }
+      });
+
+      // timetable.addEvent('Lunch', 'Jakarta', new Date(2015,7,17,9,30), new Date(2015,7,17,11,45), { onClick: function(event) {
+      //   window.alert('You clicked on the ' + event.name + ' event in ' + event.location + '. This is an example of a click handler');
+
+      var renderer = new Timetable.Renderer(timetable);
+      renderer.draw('.timetable');
+    }
+
+    setDay(showDay,document.getElementsByTagName("button")[0]);
+  </script>
+</body>
+
+</html>
